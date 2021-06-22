@@ -3,6 +3,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Login from './components/Login/Login';
 import Home from './components/Home/Home';
 import MainHeader from './components/MainHeader/MainHeader';
+import AuthContext from './store/AuthContext';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,6 +21,9 @@ function App() {
   // useEffect is a React hook.
   // React will rememver the function you passed,
   // and call it later after perfoming the DOM updates.
+  // The frst arguments is a function
+  // The second is an array of dependencies
+  // ...when dependency canges, useEffect will be called.
   useEffect(() => {
     // Each time the page is loaded,
     // we will get the data in Local Storage.
@@ -27,21 +31,16 @@ function App() {
     if (isUserLoggedin === "1") {
       setIsLoggedIn(true);
     }
-  }, []); // The frst arguments is a function
-  // The second is an array of dependencies
-  // ...when dependency canges, useEffect will be called.
+  }, []);
 
   return (
-    <Fragment>
-      <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+    <AuthContext.Provider value={isLoggedIn}>
+      <MainHeader onLogout={logoutHandler}/>
       <main>
-        {/* if false, call the login handler */}
-        {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {/* if true, call the logout handler */}
-        {isLoggedIn && <Home onLogout={logoutHandler} />}
-
+        {!isLoggedIn && <Login onLogin={loginHandler}/>}
+        {isLoggedIn && <Home onLogout={logoutHandler}/>}
       </main>
-    </Fragment>
+    </AuthContext.Provider>
   );
 }
 
