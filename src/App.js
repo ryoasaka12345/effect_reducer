@@ -12,8 +12,8 @@ function App() {
     <Fragment>
       <MainHeader />
       <main>
-        {!createContext.isLoggedIn && <Login />}
-        {ctx.isLoggedIn && <Home />}
+        {!ctx.isLoggedIn && <Login onLogin={ctx.onLogin} />}
+        {ctx.isLoggedIn && <Home onLogout={ctx.onLogin}/>}
       </main>
     </Fragment>
   );
